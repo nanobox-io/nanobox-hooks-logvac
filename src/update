@@ -1,0 +1,53 @@
+#!/bin/bash
+
+# First, let's make sure logvac is up-to-date
+# extract installed version
+logvac_installed=$(cat /var/nanobox/logvac.md5)
+# download the latest checksum
+curl \
+  -f \
+  -k \
+  -o /var/nanobox/logvac.md5 \
+  https://s3.amazonaws.com/tools.nanopack.io/logvac/linux/amd64/logvac.md5
+# compare latest with installed
+logvac_latest=$(cat /var/nanobox/logvac.md5)
+if [ ! "$logvac_installed" = "$logvac_latest" ]; then
+  echo "Logvac is out of date, updating to latest"
+  # stop the running Nanoagent
+  sv logvac stop
+  # download the latest version
+  curl \
+    -f \
+    -k \
+    -o /usr/local/bin/logvac \
+    https://s3.amazonaws.com/tools.nanopack.io/logvac/linux/amd64/logvac
+  # update permissions
+  chmod 755 /usr/local/bin/logvac
+  # start the new version
+  sv logvac start
+else
+  echo "Logvac is up to date."
+fi
+
+# Now let's see if our hooks are up-to-date
+# extract installed version
+hooks_installed=$(cat /var/nanobox/hooks.md5)
+# download the latest checksum
+curl \
+  -f \
+  -k \
+  -o /var/nanobox/hooks.md5 \
+  https://s3.amazonaws.com/tools.nanobox.io/hooks/logvac-stable.md5
+# compare latest with installed
+hooks_latest=$(cat /var/nanobox/hooks.md5)
+if [ ! "$hooks_installed" = "$hooks_latest" ]; then
+  echo "Hooks are out of date, updating to latest"
+  # download the latest version
+  curl \
+    -f \
+    -k \
+    https://s3.amazonaws.com/tools.nanobox.io/hooks/logvac-stable.tgz \
+      | tar -xz -C /opt/nanobox/hooks
+else
+  echo "Hooks are up to date."
+fi

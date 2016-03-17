@@ -1,0 +1,78 @@
+# source docker helpers
+. util/docker.sh
+
+@test "Start Old Container" {
+  start_container "test-migrate-old" "192.168.0.2"
+}
+
+@test "Configure Old Logvac" {
+  # Run Hook
+  run run_hook "test-migrate-old" "configure" "$(payload configure)"
+  [ "$status" -eq 0 ]
+}
+
+@test "Start Logvac On Old" {
+  run run_hook "test-migrate-old" "start" "{}"
+  [ "$status" -eq 0 ]
+}
+
+@test "Insert Log Data" {
+  run docker exec "test-migrate-old" bash -c "curl http://127.0.0.1:1234 -i -H \"X-AUTH-TOKEN: 123\" -d '{\"id\":\"log-test\",\"type\":\"test\",\"message\":\"my first log\"}' 2> /dev/null"
+  echo "$output"
+  [ "$status" -eq 0 ]
+}
+
+@test "Start New Container" {
+  start_container "test-migrate-new" "192.168.0.3"
+}
+
+@test "Configure New Logvac" {
+  run run_hook "test-migrate-new" "configure" "$(payload configure)"
+  [ "$status" -eq 0 ]
+}
+
+@test "Prepare New Import" {
+  run run_hook "test-migrate-new" "import-prep" "{}"
+  [ "$status" -eq 0 ]
+}
+
+@test "Export Live Data" {
+  run run_hook "test-migrate-old" "export-live" "$(payload export-live)"
+  echo "$output"
+  [ "$status" -eq 0 ]
+}
+
+@test "Stop Old Logvac Service" {
+  run run_hook "test-migrate-old" "stop" "{}"
+  [ "$status" -eq 0 ]
+}
+
+@test "Export Final Data" {
+  run run_hook "test-migrate-old" "export-final" "$(payload export-final)"
+  echo "$output"
+  [ "$status" -eq 0 ]
+}
+
+@test "Clean After Import" {
+  run run_hook "test-migrate-new" "import-clean" "{}"
+  [ "$status" -eq 0 ]
+}
+
+@test "Start New Logvac Service" {
+  run run_hook "test-migrate-new" "start" "{}"
+  [ "$status" -eq 0 ]
+}
+
+@test "Verify Data Transfered" {
+  run docker exec "test-migrate-new" bash -c "curl -i -H \"X-AUTH-TOKEN: 123\" \"http://127.0.0.1:1234?type=test\" 2> /dev/null | grep log-test"
+  echo "$output"
+  [ "$status" -eq 0 ]
+}
+
+@test "Stop Old Container" {
+  stop_container "test-migrate-old"
+}
+
+@test "Stop New Container" {
+  stop_container "test-migrate-new"
+}
