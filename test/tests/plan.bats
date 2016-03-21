@@ -9,7 +9,12 @@
   run run_hook "test-plan" "plan" "$(payload plan)"
 
   expected=$(cat <<-END
-{}
+{
+  "behaviors": {
+    "backupable",
+    "migratable"
+  }
+}
 END)
 
   [ "$output" = "$expected" ]
