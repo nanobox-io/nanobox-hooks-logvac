@@ -21,7 +21,7 @@
 
 @test "Start" {
   # Run hook
-  run run_hook "test-single" "start" "{}"
+  run run_hook "test-single" "start" "$(payload start)"
   [ "$status" -eq 0 ]
 
   # Verify logvac running
@@ -46,7 +46,7 @@
 
 @test "Stop" {
   # Run hook
-  run run_hook "test-single" "stop" "{}"
+  run run_hook "test-single" "stop" "$(payload start)"
   [ "$status" -eq 0 ]
 
   # Wait until services shut down
