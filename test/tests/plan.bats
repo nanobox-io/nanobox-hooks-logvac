@@ -10,10 +10,10 @@
 
   expected=$(cat <<-END
 {
-  "behaviors": {
+  "behaviors": [
     "backupable",
     "migratable"
-  }
+  ]
 }
 END)
 
