@@ -17,7 +17,7 @@
 }
 
 @test "Insert Log Data" {
-  run docker exec "test-migrate-old" bash -c "curl http://127.0.0.1:6361 -i -H \"X-AUTH-TOKEN: 123\" -d '{\"id\":\"log-test\",\"type\":\"test\",\"message\":\"my first log\"}' 2> /dev/null"
+  run docker exec "test-migrate-old" bash -c "curl -k https://127.0.0.1:6361 -i -H \"X-AUTH-TOKEN: 123\" -d '{\"id\":\"log-test\",\"type\":\"test\",\"message\":\"my first log\"}' 2> /dev/null"
   echo "$output"
   [ "$status" -eq 0 ]
 }
@@ -64,7 +64,7 @@
 }
 
 @test "Verify Data Transfered" {
-  run docker exec "test-migrate-new" bash -c "curl -i -H \"X-AUTH-TOKEN: 123\" \"http://127.0.0.1:6361?type=test\" 2> /dev/null | grep log-test"
+  run docker exec "test-migrate-new" bash -c "curl -k -i -H \"X-AUTH-TOKEN: 123\" \"https://127.0.0.1:6361?type=test\" 2> /dev/null | grep log-test"
   echo "$output"
   [ "$status" -eq 0 ]
 }
