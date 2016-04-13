@@ -1,5 +1,6 @@
 {
   "logvac_host": "127.0.0.1",
+  "mist_host": "192.168.0.100",
   "platform": "local",
   "config": {
     "token": "123"

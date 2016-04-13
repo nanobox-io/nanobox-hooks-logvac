@@ -1,6 +1,13 @@
 # source docker helpers
 . util/docker.sh
 
+# source mist helpers
+. util/mist.sh
+
+@test "Start Mist Container" {
+  start_mist
+}
+
 @test "Start Container" {
   start_container "test-single" "192.168.0.2"
 }
@@ -66,4 +73,8 @@
 
 @test "Stop Container" {
   stop_container "test-single"
+}
+
+@test "Stop Mist Container" {
+  stop_mist
 }
