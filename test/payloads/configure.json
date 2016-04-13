@@ -1,5 +1,6 @@
 {
   "logvac_host": "127.0.0.1",
+  "mist_host": "127.0.0.1",
   "platform": "production",
   "config": {
     "token": "123"
