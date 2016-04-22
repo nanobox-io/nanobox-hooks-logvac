@@ -21,7 +21,11 @@ end
 template '/etc/logvac/config.json' do
   source 'logvac/config.json.erb'
   mode 0644
-  variables ({ config: payload[:config], mist: payload[:mist_host] })
+  variables ({
+    config: payload[:config],
+    mist: payload[:mist_host],
+    mist_token: payload[:mist_token]
+  })
   owner 'gonano'
   group 'gonano'
 end

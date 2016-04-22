@@ -52,3 +52,9 @@ end
 service 'logvac' do
   action :enable
 end
+
+# wait until logvac is ready for interaction
+socket 'logvac' do
+  port 6361
+  action :listening
+end
