@@ -52,28 +52,3 @@ end
 service 'logvac' do
   action :enable
 end
-
-# wait until logvac is ready for interaction
-ready = false
-attempts = 0
-until ready or attempts == 10
-
-  attempts += 1
-
-  execute 'probe connectivity' do
-    command <<-EOF
-      curl \
-        -k \
-        -H "X-AUTH-TOKEN: #{payload[:token]}" \
-        https://127.0.0.1:6361?limit=1
-    EOF
-    on_exit { |code| ready = true if code == 0}
-  end
-
-  sleep 1 if not ready
-end
-
-if not ready
-  raise "Logvac is started but not handling connections"
-  exit 1
-end
