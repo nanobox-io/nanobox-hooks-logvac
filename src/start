@@ -56,5 +56,6 @@ end
 # wait until logvac is ready for interaction
 socket 'logvac' do
   port 6361
+  max_checks 10
   action :listening
 end
