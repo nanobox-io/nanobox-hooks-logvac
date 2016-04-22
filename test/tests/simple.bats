@@ -42,7 +42,8 @@
 
 @test "Verify Service" {
   # Add a log entry
-  run docker exec "test-single" bash -c "curl -k https://127.0.0.1:6361 -i -H \"X-AUTH-TOKEN: 123\" -d '{\"id\":\"log-test\",\"type\":\"test\",\"message\":\"my first log\"}' 2> /dev/null"
+  run docker exec "test-single" bash -c "curl -k https://127.0.0.1:6361 -i -H \"X-AUTH-TOKEN: 123\" -d '{\"id\":\"log-test\",\"type\":\"test\",\"message\":\"my first log\"}'"
+  echo "$output"
   [ "$status" -eq 0 ]
 
   # fetch the log
