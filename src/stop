@@ -10,23 +10,23 @@ require 'hookit/setup'
 # Stop logvac
 service 'logvac' do
   action :disable
-  not_if { !Dir.exit?('/etc/service/logvac') }
+  not_if { !Dir.exist?('/etc/service/logvac') }
 end
 
 # Remove logvac runit definition
 directory '/etc/service/logvac' do
   action :delete
-  not_if { !Dir.exit?('/etc/service/logvac') }
+  not_if { !Dir.exist?('/etc/service/logvac') }
 end
 
 # Stop narc
 service 'narc' do
   action :disable
-  not_if { !Dir.exit?('/etc/service/narc') }
+  not_if { !Dir.exist?('/etc/service/narc') }
 end
 
 # Remove narc runit definition
 directory '/etc/service/narc' do
   action :delete
-  not_if { !Dir.exit?('/etc/service/narc') }
+  not_if { !Dir.exist?('/etc/service/narc') }
 end
