@@ -27,7 +27,7 @@
   # wait for a few seconds...
   sleep 3
 
-  run docker exec "test-migrate-old" bash -c "curl -k https://127.0.0.1:6361/logs -i -H \"X-AUTH-TOKEN: 123\" -d '{\"id\":\"log-test\",\"type\":\"test\",\"message\":\"my first log\"}' 2> /dev/null"
+  run docker exec "test-migrate-old" bash -c "curl -k https://127.0.0.1:6361/logs -i -H \"X-USER-TOKEN: 123\" -d '{\"id\":\"log-test\",\"type\":\"test\",\"message\":\"my first log\"}' 2> /dev/null"
   echo "$output"
   [ "$status" -eq 0 ]
 }
@@ -77,7 +77,7 @@
   # wait for a few seconds...
   sleep 3
   
-  run docker exec "test-migrate-new" bash -c "curl -k -i -H \"X-AUTH-TOKEN: 123\" \"https://127.0.0.1:6361/logs?type=test\" 2> /dev/null | grep log-test"
+  run docker exec "test-migrate-new" bash -c "curl -k -i -H \"X-USER-TOKEN: 123\" \"https://127.0.0.1:6361/logs?type=test\" 2> /dev/null | grep log-test"
   echo "$output"
   [ "$status" -eq 0 ]
 }

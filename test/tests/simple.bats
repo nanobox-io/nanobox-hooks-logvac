@@ -45,12 +45,12 @@
   sleep 3
 
   # Add a log entry
-  run docker exec "test-single" bash -c "curl -k https://127.0.0.1:6361/logs -i -H \"X-AUTH-TOKEN: 123\" -d '{\"id\":\"log-test\",\"type\":\"test\",\"message\":\"my first log\"}'"
+  run docker exec "test-single" bash -c "curl -k https://127.0.0.1:6361/logs -i -H \"X-USER-TOKEN: 123\" -d '{\"id\":\"log-test\",\"type\":\"test\",\"message\":\"my first log\"}'"
   echo "$output"
   [ "$status" -eq 0 ]
 
   # fetch the log
-  run docker exec "test-single" bash -c "curl -k -H \"X-AUTH-TOKEN: 123\" \"https://127.0.0.1:6361/logs?type=test\" 2> /dev/null | grep log-test"
+  run docker exec "test-single" bash -c "curl -k -H \"X-USER-TOKEN: 123\" \"https://127.0.0.1:6361/logs?type=test\" 2> /dev/null | grep log-test"
   echo "$output"
   [ "$status" -eq 0 ]
 }
