@@ -19,7 +19,7 @@ aws_logvac_md5 = execute "aws logvac md5" do
     bash -c 'curl \
       -f \
       -k \
-      https://s3.amazonaws.com/tools.nanopack.io/logvac/linux/amd64/logvac.md5 \
+      https://d3ep67zochz54j.cloudfront.net/logvac/linux/amd64/logvac.md5 \
         | tee /var/nanobox/logvac.md5'
   END
 end
@@ -39,7 +39,7 @@ if local_logvac_md5 != aws_logvac_md5
         -f \
         -k \
         -o /usr/local/bin/logvac
-        https://s3.amazonaws.com/tools.nanopack.io/logvac/linux/amd64/logvac'
+        https://d3ep67zochz54j.cloudfront.net/logvac/linux/amd64/logvac'
     END
   end
 
@@ -67,7 +67,7 @@ aws_hooks_md5 = execute "aws hooks md5" do
     bash -c 'curl \
       -f \
       -k \
-      https://s3.amazonaws.com/tools.nanobox.io/hooks/logvac-stable.md5 \
+      https://d1ormdui8qdvue.cloudfront.net/hooks/logvac-stable.md5 \
         | tee /var/nanobox/hooks.md5'
   END
 end
@@ -79,7 +79,7 @@ if local_hooks_md5 != aws_hooks_md5
       bash -c 'curl \
           -f \
           -k \
-          https://s3.amazonaws.com/tools.nanobox.io/hooks/logvac-stable.tgz \
+          https://d1ormdui8qdvue.cloudfront.net/hooks/logvac-stable.tgz \
             | tar -xz -C /opt/nanobox/hooks'
     END
   end
