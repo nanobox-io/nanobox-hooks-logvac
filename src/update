@@ -13,12 +13,12 @@ local_logvac_md5 = execute "local logvac md5" do
 end
 
 aws_logvac_md5 = execute "aws logvac md5" do
-  command <<-END 
-    bash -c 'curl \
+  command <<-END
+    curl \
       -f \
       -k \
       https://d3ep67zochz54j.cloudfront.net/logvac/linux/amd64/logvac.md5 \
-        | tee /var/nanobox/logvac.md5'
+        | tee /tmp/logvac.md5
   END
 end
 
@@ -30,24 +30,26 @@ if local_logvac_md5 != aws_logvac_md5
   end
 
   execute "Download logvac" do
-    command <<-END 
-      bash -c 'curl \
+    command <<-END
+      curl \
         -f \
         -k \
-        -o /usr/local/bin/logvac
-        https://d3ep67zochz54j.cloudfront.net/logvac/linux/amd64/logvac'
+        -o /usr/local/bin/logvac \
+        https://d3ep67zochz54j.cloudfront.net/logvac/linux/amd64/logvac
     END
   end
 
   execute "Chmod logvac" do
-    command <<-END 
-      bash -c 'chmod 755 /usr/local/bin/logvac'
-    END
+    command "chmod 755 /usr/local/bin/logvac"
   end
 
   service 'logvac' do
     action :enable
     not_if { !Dir.exist?('/etc/service/logvac') }
+  end
+
+  execute "Finalize update" do
+    command "mv /tmp/logvac.md5 /var/nanobox/logvac.md5"
   end
 end
 
@@ -58,22 +60,26 @@ end
 
 aws_hooks_md5 = execute "aws hooks md5" do
   command <<-END
-    bash -c 'curl \
+    curl \
       -f \
       -k \
       https://d1ormdui8qdvue.cloudfront.net/hooks/logvac-stable.md5 \
-        | tee /var/nanobox/hooks.md5'
+        | tee /tmp/hooks.md5'
   END
 end
 
 if local_hooks_md5 != aws_hooks_md5
   execute "update hooks" do
     command <<-END
-      bash -c 'curl \
-          -f \
-          -k \
-          https://d1ormdui8qdvue.cloudfront.net/hooks/logvac-stable.tgz \
-            | tar -xz -C /opt/nanobox/hooks'
+      curl \
+        -f \
+        -k \
+        https://d1ormdui8qdvue.cloudfront.net/hooks/logvac-stable.tgz \
+          | tar -xz -C /opt/nanobox/hooks'
     END
+  end
+
+  execute "Finalize update" do
+    command "mv /tmp/hooks.md5 /var/nanobox/hooks.md5"
   end
 end
