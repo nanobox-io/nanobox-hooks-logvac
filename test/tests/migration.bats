@@ -50,6 +50,9 @@
   run run_hook "test-migrate-old" "export-live" "$(payload export-live)"
   echo "$output"
   [ "$status" -eq 0 ]
+
+  run docker exec "test-migrate-new" bash -c "[[ ! -d /root/var ]]"
+  [ "$status" -eq 0 ]
 }
 
 @test "Stop Old Logvac Service" {
@@ -60,6 +63,9 @@
 @test "Export Final Data" {
   run run_hook "test-migrate-old" "export-final" "$(payload export-final)"
   echo "$output"
+  [ "$status" -eq 0 ]
+
+  run docker exec "test-migrate-new" bash -c "[[ ! -d /root/var ]]"
   [ "$status" -eq 0 ]
 }
 
