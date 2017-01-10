@@ -18,6 +18,6 @@ execute "send bulk data to new member" do
         | ssh \
           -o StrictHostKeyChecking=no \
           #{payload[:member][:local_ip]} \
-          tar -xpf -
+          tar -C / -xpf -
   EOF
 end
