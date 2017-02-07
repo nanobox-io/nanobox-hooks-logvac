@@ -22,7 +22,7 @@ template '/etc/logvac/config.json' do
   source 'logvac/config.json.erb'
   mode 0644
   variables ({
-    config: payload[:config],
+    config: (payload[:config] || {}),
     mist: payload[:mist_host],
     mist_token: payload[:mist_token]
   })
@@ -35,7 +35,7 @@ execute "add the auth token" do
   command <<-SCRIPT
     logvac add-token \
       -A "boltdb:///var/db/logvac/log-auth.bolt" \
-      -t #{payload[:config][:token]}
+      -t #{(payload[:config][:token] || {})}
   SCRIPT
 end
 
