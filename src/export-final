@@ -9,11 +9,9 @@ require 'hookit/setup'
 
 # This hook will export the data to the new members while the service is offline
 execute "send diff data to new member" do
-  command <<-EOF
-    rsync \
-      --delete \
-      -a \
-      /var/db/logvac/. \
-      #{payload[:member][:local_ip]}:/var/db/logvac/
-  EOF
+  command "rsync \
+    --delete \
+    -e 'ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no' \
+    -a /var/db/logvac/. \
+    #{payload[:member][:local_ip]}:/var/db/logvac/"
 end
