@@ -20,10 +20,6 @@
   # Verify logvac configuration
   run docker exec test-single bash -c "[ -f /etc/logvac/config.json ]"
   [ "$status" -eq 0 ]
-
-  # Verify narc configuration
-  run docker exec test-single bash -c "[ -f /opt/gonano/etc/narc.conf ]"
-  [ "$status" -eq 0 ]
 }
 
 @test "Start" {
@@ -33,10 +29,6 @@
 
   # Verify logvac running
   run docker exec test-single bash -c "ps aux | grep [l]ogvac"
-  [ "$status" -eq 0 ]
-
-  # Verify narc running
-  run docker exec test-single bash -c "ps aux | grep [n]arc"
   [ "$status" -eq 0 ]
 }
 
@@ -72,10 +64,6 @@
 
   # Verify logvac is not running
   run docker exec test-single bash -c "ps aux | grep [l]ogvac"
-  [ "$status" -eq 1 ]
-
-  # Verify narc is not running
-  run docker exec test-single bash -c "ps aux | grep [n]arc"
   [ "$status" -eq 1 ]
 }
 
